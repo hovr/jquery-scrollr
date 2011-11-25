@@ -29,14 +29,17 @@
             return this.each(function () {
                 var self = $(this).addClass('scrollr-self').css('overflow', 'hidden'),
                     data = self.data('scrollr');
+                    
                 if (!data) {
                     // Defaults
                     var opts = $.extend({
-                        'height': self.css('height'),
-                        'width': self.css('width'),
-                        'innerHeight': 0,
-                        'offSet': 0
+                        'height'		: self.css('height'),
+                        'width'			: self.css('width'),
+                        'innerHeight'	: 0,
+                        'offSet'		: 0,
+                        'fade'			: false // to fade, or not to fade, that is the question
                     }, options);
+                    
                     // wrap element in viewport div
                     opts.inner = $('<div></div>').addClass('scrollr-inner');
                     opts.viewPort = $('<div></div>').addClass('scrollr-viewport').css({
@@ -54,13 +57,13 @@
                     opts.inner.css('height', opts.innerHeight + 'px');
                     // Add scrollbar
                     opts.handle = $('<div></div>').addClass('scrollr-handle');
-                    opts.scrollbar = $('<div></div>').addClass('scrollr-scrollbar').css('height', opts.height).append(opts.handle);
-                    opts.scrollbar.appendTo(opts.viewPort)
+                    opts.scrollbar = ( opts.fade === false ) ? $('<div></div>').addClass('scrollr-scrollbar') : $('<div></div>').addClass('scrollr-scrollbar fade');
+                    opts.scrollbar.css('height', opts.height).append(opts.handle).appendTo(opts.viewPort);
                     opts.handle = self.find('.scrollr-handle');
                     opts.scrollbar = self.find('.scrollr-scrollbar');
 
                     function mwheel() {
-                        opts.viewPort.bind('mousewheel', function (event, delta) {
+                        opts.viewPort.bind('mousewheel.scrollr', function (event, delta) {
                             event.preventDefault();
                             amount = (delta < 0) ? Math.abs(delta) : (delta * (-1))
                             opts.offSet = opts.offSet + (amount * 12);
@@ -75,7 +78,7 @@
                             }
                             opts.handle.trigger('mwheel');
                         });
-                        opts.handle.bind('mwheel', function () {
+                        opts.handle.bind('mwheel.scrollr', function () {
                             var per = Math.floor(((opts.offSet / (opts.innerHeight - opts.viewPort.height())) * 100));
                             opts.handle.dragger.css({
                                 top: (((opts.handle.maxTop) / 100) * per)
@@ -102,11 +105,10 @@
                     function handle() {
                         opts.handle.dragger = opts.handle;
                         opts.handle.maxTop = opts.scrollbar.height() - opts.handle.height();
-                        // START DRAGGABLE
-                        opts.handle.bind('mousedown', function (e) {
+                        opts.handle.bind('mousedown.scrollr', function (e) {
                             e.preventDefault();
                             opts.handle.mousePageY = e.pageY, opts.handle.dragPos = opts.handle.dragger.position().top, opts.handle.leftPos, opts.handle.topPos;
-                            $(document).bind('mousemove mouseup', function (event) {
+                            $(document).bind('mousemove.scrollr mouseup.scrollr', function (event) {
                                 switch (event.type) {
                                 case 'mousemove':
                                     opts.handle.topPos = (opts.handle.dragPos + event.pageY) - opts.handle.mousePageY;
@@ -128,16 +130,15 @@
                                     }
                                     break;
                                 case 'mouseup':
-                                    $(this).unbind('mousemove mouseup');
+                                    $(this).unbind('mousemove.scrollr mouseup.scrollr');
                                     break;
                                 }
                             });
                         });
-                        // END DRAGGABLE
                     };
 
                     function scrollbar() {
-                        opts.scrollbar.bind('click', function (e) {
+                        opts.scrollbar.bind('click.scrollr', function (e) {
                             if (e.originalEvent.originalTarget.className != opts.handle.dragger.attr('class')) {
                                 opts.scrollbar.position = opts.scrollbar.offset().top;
                                 opts.scrollbar.clickPos = e.pageY - opts.scrollbar.position;
@@ -168,6 +169,39 @@
                     self.data('scrollr', opts); //pass data for other functions
                 }
             });
+        },
+
+        destroy : function () {
+
+			// You expect me to talk!? Noooo Mister Bond, I expect you to DIE!
+			
+			var self = $(this),
+        		opts = self.data('scrollr');
+			
+			// Unbind     	
+        	$.each(opts, function (i, e) {
+        		$(e).unbind('.scrollr');
+        	});
+        	
+        	// Remove elements
+			self.find('.scrollr-inner').unwrap();
+        	self.find('.scrollr-inner').children().unwrap();
+        	self.find('.scrollr-scrollbar').remove();
+        	
+        	// Remove class
+        	self.removeClass('scrollr-self')
+        	
+        	// Remove data :'(
+        	self.removeData('scrollr');
+        },
+        
+        refresh : function () {
+			
+			var self = $(this),
+        		opts = self.data('scrollr');
+        	
+			methods.destroy.apply(self, arguments);
+			methods.init.apply(self, arguments);
         }
     };
     $.fn.scrollr = function (method) {

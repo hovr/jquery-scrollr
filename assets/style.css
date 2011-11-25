@@ -51,6 +51,10 @@ h1 {
 
 /* Scrollr styles */
 
+.scrollr-self {
+	overflow: hidden;
+}
+
 .scrollr-viewport {
 	overflow: hidden;
 	position: relative;
@@ -70,8 +74,35 @@ h1 {
     right: 0;
     top: 0;
     width: 8px;
-    z-index: 999;
 }
+
+.scrollr-scrollbar.fade {
+	filter: alpha(opacity:0);
+	KHTMLOpacity: 0;
+	MozOpacity: 0;
+	-khtml-opacity:0;
+	-ms-filter:”alpha(opacity=0)”;
+	-moz-opacity:0;
+	filter:alpha(opacity=0);
+	opacity:0;
+
+	-webkit-transition: all 0.25s ease-in-out;  
+	-moz-transition: all 0.25s ease-in-out;  
+	-o-transition: all 0.25s ease-in-out;  
+	transition: all 0.25s ease-in-out;
+
+}
+
+	.scrollr-viewport:hover .scrollr-scrollbar.fade {
+		filter: alpha(opacity:1);
+		KHTMLOpacity: 1;
+		MozOpacity: 1;
+		-khtml-opacity:1;
+		-ms-filter:”alpha(opacity=100)”;
+		-moz-opacity:1;
+		filter:alpha(opacity=100);
+		opacity:1;
+	}
 
 .scrollr-handle {
 	width: 8px;

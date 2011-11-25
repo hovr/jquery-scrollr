@@ -1,0 +1,86 @@
+.wrapper {
+	width: 960px;
+	margin: 0 auto;
+}
+
+h1 {
+	font-family: 'Sorts Mill Goudy', serif;
+	width: 100%;
+	display: block;
+	padding: 24px 0;
+	font-size: 50px;
+	text-align: center;
+}
+
+.info {
+	width: 300px;
+	height: 60px;
+	margin: 0 auto;
+}
+
+.info ol {
+	list-style: decimal inside;
+}
+
+.info ol li {
+	font-family: 'Sorts Mill Goudy', serif;
+	font-size: 20px;
+	text-align: center;	
+}
+
+.content1 {
+	width: 400px;
+	height: 300px;
+	overflow: auto;
+	margin: 60px auto;
+}
+
+.content2 {
+	width: 800px;
+	height: 150px;
+	overflow: auto;
+	margin: 60px auto;
+}
+
+.content3 {
+	width: 100px;
+	height: 600px;
+	overflow: auto;
+	margin: 60px auto;	
+}
+
+/* Scrollr styles */
+
+.scrollr-viewport {
+	overflow: hidden;
+	position: relative;
+}
+
+.scrollr-inner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0 16px 0 0;
+}
+
+.scrollr-scrollbar {
+    background-color: #fff;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 8px;
+    z-index: 999;
+}
+
+.scrollr-handle {
+	width: 8px;
+	height: 30px;
+	position: absolute;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	top: 0;
+	left: 0;
+	background-color: #ccc;
+}
